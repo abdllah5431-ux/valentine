@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Valentine Proposal</title>
+<link href="https://fonts.googleapis.com/css2?family=Parisienne&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body, html { height:100%; font-family:'Roboto', sans-serif; overflow:hidden; }
+
+body {
+  background: linear-gradient(160deg, #0d0d1a, #1a0d1a);
+  display:flex; justify-content:center; align-items:center; flex-direction:column; transition: background 0.5s;
+  color:white;
+}
+
+.message {
+  font-size:1.8rem; text-align:center; max-width:800px; padding:20px; line-height:1.6; font-weight:500;
+  color:#fff7f7; text-shadow: 0 0 5px #ff4d6d;
+}
+
+.heart { color:#ff4d6d; animation:beat 1s infinite; }
+@keyframes beat { 0%,100%{transform:scale(1);} 50%{transform:scale(1.3);} }
+
+.buttons {
+  margin-top:40px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:40px;
+  position:relative;
+}
+
+.btn {
+  padding:15px 40px;
+  font-size:1.4rem;
+  border:none;
+  border-radius:50px;
+  cursor:pointer;
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+  font-weight:700;
+  position:relative;
+}
+
+.yes {
+  background:#ff4d6d;
+  color:white;
+  box-shadow:0 5px 20px rgba(255,77,109,0.6);
+  z-index:1;
+}
+
+.no {
+  background:#1a0d1a;
+  color:#ff4d6d;
+  border:2px solid #ff4d6d;
+  box-shadow:0 4px 15px rgba(255,77,109,0.4);
+  z-index:2;
+}
+
+.raindrop {
+  position:absolute; top:-10px; width:2px; height:15px; background: #ff77aa; opacity:0.5; animation:fall linear infinite;
+}
+@keyframes fall { to { transform: translateY(100vh); } }
+
+.screen2 {
+  display:none;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+}
+
+.screen2 .message {
+  font-size:2rem; color:#ff4d6d; text-shadow: 0 0 8px #ff77aa; font-weight:600; margin-top:20px;
+}
+
+.glow {
+  color:#ff77aa !important;
+  text-shadow: 0 0 20px #ff77aa, 0 0 30px #ff4d6d;
+  transition: 0.3s ease;
+}
+</style>
+</head>
+<body>
+
+<div class="screen1">
+  <div class="message">
+    Hello <span id="name">Habibti Dilara</span>, I know we are couples but that won't stop me from asking you to be my valentine, so do you want to be my valentine for once and forever? <span class="heart">❤️😊</span>
+  </div>
+  <div class="buttons">
+    <button class="btn yes">Yes</button>
+    <button class="btn no">No</button>
+  </div>
+</div>
+
+<div class="screen2">
+  <div style="font-size:100px;">🌸</div>
+  <div class="message">Yayyy you are my valentine now! 😊</div>
+</div>
+
+<audio id="bgMusic" loop>
+  <source src="https://www.bensound.com/bensound-music/bensound-romantic.mp3" type="audio/mpeg">
+</audio>
+
+<audio id="romanticSong">
+  <source src="https://www.bensound.com/bensound-music/bensound-romantic.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+const noBtn = document.querySelector('.no');
+const yesBtn = document.querySelector('.yes');
+const screen1 = document.querySelector('.screen1');
+const screen2 = document.querySelector('.screen2');
+const body = document.body;
+const nameSpan = document.getElementById('name');
+const bgMusic = document.getElementById('bgMusic');
+const romanticSong = document.getElementById('romanticSong');
+
+bgMusic.play();
+
+let noAttempts = 0;
+
+// Escape behavior for No button
+noBtn.addEventListener('mouseenter', () => {
+    const btnWidth = noBtn.offsetWidth;
+    const btnHeight = noBtn.offsetHeight;
+    const padding = 20;
+
+    let x = Math.random() * (window.innerWidth - btnWidth - padding*2) + padding;
+    let y = Math.random() * (window.innerHeight - btnHeight - padding*2) + padding;
+
+    noBtn.style.transition = 'transform 0.3s ease';
+    noBtn.style.transform = `translate(${x - noBtn.offsetLeft}px, ${y - noBtn.offsetTop}px)`;
+
+    noAttempts++;
+    if(noAttempts > 3 && !document.querySelector('.raindrop')) startRain();
+});
+
+// Rain effect
+function startRain() {
+    for(let i=0;i<120;i++){
+        const drop = document.createElement('div');
+        drop.classList.add('raindrop');
+        drop.style.left = Math.random()*100+'vw';
+        drop.style.animationDuration = 0.5 + Math.random()*1.5+'s';
+        body.appendChild(drop);
+    }
+}
+
+// Stop rain
+function stopRain() {
+    document.querySelectorAll('.raindrop').forEach(d => d.remove());
+    noBtn.style.transform = 'translate(0,0)';
+}
+
+// Yes button click
+yesBtn.addEventListener('click', () => {
+    screen1.style.display = 'none';
+    screen2.style.display = 'flex';
+    stopRain();
+    romanticSong.play(); // play romantic song
+});
+
+// Yes hover glow effect on name
+yesBtn.addEventListener('mouseenter', () => { 
+    stopRain();
+    nameSpan.classList.add('glow');
+});
+yesBtn.addEventListener('mouseleave', () => {
+    nameSpan.classList.remove('glow');
+});
+</script>
+
+</body>
+</html>
